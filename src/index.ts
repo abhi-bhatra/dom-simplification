@@ -74,6 +74,8 @@ const simplifyDOM = (originalHTML: string, callback: () => void) => {
         'link',
         'script',
         'meta',
+        'svg',
+        'details',
         // Add other selectors you want to remove dynamically
     ];
 
@@ -83,6 +85,8 @@ const simplifyDOM = (originalHTML: string, callback: () => void) => {
         'style',
         'href',
         'src',
+        'id',
+        'type',
         // Add other attributes you want to remove dynamically
     ];
 
