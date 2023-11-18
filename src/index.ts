@@ -1,5 +1,44 @@
 import * as fs from 'fs';
 import { JSDOM } from 'jsdom';
+import axios from 'axios';
+
+// URL of the website you want to fetch HTML from
+const websiteURL = 'https://github.com/abhi-bhatra';
+
+// Function to fetch HTML from a URL and save it to input.html
+const fetchAndSaveHTML = async (url: string) => {
+    try {
+        const response = await axios.get(url);
+        const htmlContent = response.data;
+
+        // Write the fetched HTML content to input.html
+        fs.writeFileSync('input.html', htmlContent, 'utf-8');
+        console.log('HTML content saved to input.html');
+
+        // Proceed to simplify and format the HTML
+        simplifyAndFormatHTML();
+    } catch (error) {
+        console.error('Error fetching HTML:', error);
+    }
+};
+
+// Function to simplify and format the fetched HTML
+const simplifyAndFormatHTML = () => {
+    const inputFilePath = 'input.html';
+
+    // Read the input HTML file
+    fs.readFile(inputFilePath, 'utf8', (err, data) => {
+        if (err) {
+            console.error('Error reading file:', err);
+        } else {
+            console.log('File reading complete.');
+            simplifyDOM(data, () => {
+                formatHTML('output.html', 'output-lint.html'); // Pass simplified HTML to formatHTML
+            });
+        }
+    });
+};
+
 
 // Function to lint and write the HTML file
 const formatHTML = (inputFile: string, outputFile: string) => {
@@ -24,9 +63,6 @@ const formatHTML = (inputFile: string, outputFile: string) => {
     }
 };
 
-// Replace this with your input HTML file path
-const inputFilePath = 'D:\\dom-challenge\\src\\dump\\test1.html';
-
 // Function to simplify the DOM for LLM
 const simplifyDOM = (originalHTML: string, callback: () => void) => {
     const dom = new JSDOM(originalHTML);
@@ -45,6 +81,8 @@ const simplifyDOM = (originalHTML: string, callback: () => void) => {
         'class',
         'hidden',
         'style',
+        'href',
+        'src',
         // Add other attributes you want to remove dynamically
     ];
 
@@ -99,14 +137,4 @@ const simplifyDOM = (originalHTML: string, callback: () => void) => {
     });
 };
 
-// Read the input HTML file
-fs.readFile(inputFilePath, 'utf8', (err, data) => {
-    if (err) {
-        console.error('Error reading file:', err);
-    } else {
-        console.log('File reading complete.');
-        simplifyDOM(data, () => {
-            formatHTML('output.html', 'output-lint.html');
-        });
-    }
-});
+fetchAndSaveHTML(websiteURL);
