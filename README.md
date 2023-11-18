@@ -8,7 +8,7 @@ This TypeScript application simplifies and formats HTML retrieved from a specifi
 - [Installation](#installation)
 - [Usage](#usage)
 - [Configuration](#configuration)
-- [Contributing](#contributing)
+- [TypeScript](#Reasons for picking up TypeScript)
 - [License](#license)
 
 ## Features
